@@ -8,6 +8,20 @@ sudo apt-get purge samba
 sudo rm -rf /etc/samba/ /etc/default/samba
 sudo apt-get install samba samba-common
 
+sudo smbpasswd -a jerry
+
+where jerry is your login name for Linux Lite. Enter your password twice.
+Then do:
+
+sudo leafpad /etc/samba/smbusers
+
+The file will be empty, copy the following into it:
+
+Code:
+<jerry> = “<jerry>”
+
+where jerry is your Linux Lite username.
+
 2.
 Code:
 sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.bak
@@ -18,21 +32,31 @@ sudo nano /etc/samba/smb.conf
 Add this, in your smb.conf file:
 
 Code:
-#======================= Global Settings =====================================
+#======================= Global Settings ====================================
 [global]
 workgroup = WORKGROUP
-server string = Samba Server %v
-netbios name = linuxlite
+server string = Linux Lite Shares
+netbios name = lappy
 security = user
+encrypt passwords = true
+username map = /etc/samba/smbusers
 map to guest = bad user
+guest account = nobody
 dns proxy = no
-#============================ Share Definitions ==============================
+#======================= Share Definitions ===================================
 [linuxliteshare]
-path = /home/user/nameofsharedfolder
+path = /home/%U/Downloads
+available = yes
+valid users = %U %G
+write list = %U
 browsable = yes
+public = no
 writable = yes
-guest ok = yes
+guest ok = no
 read only = no
+printable = no
+locking = no
+strict locking = no
 
 Ctrl +O enter, Ctrl + X to save the file.
 
@@ -43,11 +67,13 @@ Code:
 user@linuxlite:~$
 
 linuxlite is the netbios name.
+path = the path to your share folder on Linux Lite that we want Windows to see eg. /home/jerry/Downloads
 
 Now we need to restart samba.
 
 Code:
 sudo service smbd restart
+sudo service nmbd restart
 
 3. On your XP machine, explore My Network Places, in the address bar type in the ip address of the Linux Lite machine eg.
 

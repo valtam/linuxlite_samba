@@ -64,9 +64,9 @@ NB: workgroup must equal the workgroup the XP machine is on.
 netbios name is the name of the Linux Lite computer, example in a terminal where you see,
 
 Code:
-user@linuxlite:~$
+user@lappy:~$
 
-linuxlite is the netbios name.
+lappy is the netbios name.
 path = the path to your share folder on Linux Lite that we want Windows to see eg. /home/jerry/Downloads
 
 Now we need to restart samba.
